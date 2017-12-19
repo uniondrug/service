@@ -35,7 +35,7 @@ class Registry extends Injectable
     public static function getUrl($name, $route)
     {
         $reg = new Registry();
-        $url = $reg->getHostByName($name).$route;
+        $url = $reg->getHostByName($name).'/'.$route;
         return $url;
     }
 
