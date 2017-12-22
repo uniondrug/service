@@ -35,17 +35,17 @@ class ResponseData extends Types
         $this->responseData['dataType'] = $this->getTypeName($typeId);
         if ($this->isErrorType($typeId)) {
             // 1.1. 错误类型
-            $this->responseData["error"] = isset($data["error"]) ? $data["error"] : 'unknown error';
-            $this->responseData["errno"] = isset($data["errno"]) ? $data["errno"] : 1;
+            $this->responseData['error'] = isset($data['error']) ? $data['error'] : 'unknown error';
+            $this->responseData['errno'] = isset($data['errno']) ? $data['errno'] : 1;
         } else if ($this->isObjectType($typeId)) {
             // 1.2. Object类型
-            $this->responseData["data"] = $data;
-        } else {
+            $this->responseData['data'] = $data;
+        } else if ($this->isListType($typeId) || $this->isPagingListType($typeId)) {
             // 1.3.1 数据列表
-            $this->responseData["data"] = ["body" => $data];
+            $this->responseData['data'] = ["body" => $data];
             // 1.3.2 带分页的列表
             if ($this->isPagingListType($typeId) && ($paging instanceof ResponsePaging)) {
-                $this->responseData["data"]["paging"] = $paging->getPaging();
+                $this->responseData['data']['paging'] = $paging->getPaging();
             }
         }
         /**
@@ -56,11 +56,13 @@ class ResponseData extends Types
          * 3. JSON格式兼容
          */
         if ($this->isObjectType($typeId)) {
-            $this->responseData["data"] = (object) $this->responseData["data"];
-        } else {
-            $this->responseData["data"]["body"] = (array) $this->responseData["data"]["body"];
-            if ($this->isPagingListType($typeId) && isset($this->responseData["data"]["paging"])) {
-                $this->responseData["data"]["paging"] = (object) $this->responseData["data"]["paging"];
+            // 3.1 Object模式
+            $this->responseData['data'] = (object) $this->responseData['data'];
+        } else if ($this->isListType($typeId) || $this->isPagingListType($typeId)) {
+            // 3.2 列表模式
+            $this->responseData['data']['body'] = (array) $this->responseData['data']['body'];
+            if ($this->isPagingListType($typeId) && isset($this->responseData['data']['paging'])) {
+                $this->responseData['data']['paging'] = (object) $this->responseData['data']['paging'];
             }
         }
     }
