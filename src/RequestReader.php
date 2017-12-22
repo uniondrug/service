@@ -66,8 +66,7 @@ class RequestReader extends Types
         }
         // 5. 结果处理
         if ($response instanceof ResponseInterface) {
-            //$contents = $response->getBody()->getContents();
-            $contents = '{"errno":"0","error":"","data":{"times":"1","values":"37.22","items":[{"id":"1","name":"\u836f\u54c11\u53f7","price":"18.88","times":"1","values":"13.33","discount":"5.55","subs":{"errno":"0","error":"","data":{"times":"1","values":"37.22","items":[{"id":"1","name":"\u836f\u54c11\u53f7","price":"18.88","times":"1","values":"13.33","discount":"5.55"},{"id":"2","name":"\u836f\u54c12\u53f7","price":"21.34","times":"0","values":"21.34","discount":"0.00"},{"id":"3","name":"\u836f\u54c13\u53f7","price":"2.55","times":"0","values":"2.55","discount":"0.00"}],"orderNo":"123456789013"}}},{"id":"2","name":"\u836f\u54c12\u53f7","price":"21.34","times":"0","values":"21.34","discount":"0.00"},{"id":"3","name":"\u836f\u54c13\u53f7","price":"2.55","times":"0","values":"2.55","discount":"0.00"}],"orderNo":"123456789013"}}';
+            $contents = $response->getBody()->getContents();
             $result->setContents($contents);
         }
         /**
