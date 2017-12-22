@@ -1,11 +1,9 @@
 <?php
 /**
- * 微服务类型定义
- * @link www.uniondrug.cn
+ * 微服务
  * @author wsfuyibing <websearch@163.com>
- * @date 2017-11-06
+ * @date 2017-12-21
  */
-
 namespace UniondrugService;
 
 /**
@@ -14,23 +12,52 @@ namespace UniondrugService;
  */
 abstract class Types
 {
-
     /**
-     * 错误类型
+     * 接口返回数据错误结构
+     * <code>
+     * return {
+     *     "errno" : "1",
+     *     "error" : "错误原因"
+     * }
+     * </code>
      */
     const SERVICE_ERROR_TYPE = 1;
+    const SERVICE_ERROR_NAME = "ERROR";
     /**
-     * 普通对象
+     * 接口返回普通对象结构
+     * return {
+     *     "errno" : "0",
+     *     "error" : "",
+     *     "data" : {
+     *         "key" => "value"
+     *     }
+     * }
      */
     const SERVICE_OBJECT_TYPE = 2;
+    const SERVICE_OBJECT_NAME = "OBJECT";
     /**
-     * 普通列表
+     * 接口返回普通数据列表
+     * return {
+     *     "errno" : "0",
+     *     "error" : "",
+     *     "data" : {
+     *         [
+     *             "id" => "1",
+     *             "key" => "value"
+     *         ],
+     *         [
+     *             "id" => "2",
+     *             "key" => "value"
+     *         ]
+     *     }
+     * }
      */
     const SERVICE_LIST_TYPE = 3;
+    const SERVICE_LIST_NAME = "LIST";
     /**
-     * 分页列表
+     * 接口返回分页数据列表
      * <code>
-     * {
+     * return {
      *     "errno" : "0",
      *     "error" : "",
      *     "data" : {,
@@ -41,13 +68,20 @@ abstract class Types
      *             { ... }
      *         ],
      *         "paging" : {
-     *             "total" : "300"
+     *             "first" => 1,     // 第一页页码
+     *             "prev" => 2,      // 上一页码
+     *             "page" => 3,      // 当前页码
+     *             "next" => 4,      // 下一页页码
+     *             "last" => 5,      // 最大页码
+     *             "pageSize" => 10, // 分页10条
+     *             "total" => 42     // 总记录数
      *         }
      *     },
      * }
      * </code>
      */
     const SERVICE_PAGING_LIST_TYPE = 4;
+    const SERVICE_PAGING_LIST_NAME = "PAGING";
 
     /**
      * 按类型ID获取接口返回的JSON类型名称
@@ -62,16 +96,16 @@ abstract class Types
         $typeName = null;
         switch ($typeId) {
             case static::SERVICE_ERROR_TYPE :
-                $typeName = "ERROR";
+                $typeName = static::SERVICE_ERROR_NAME;
                 break;
             case static::SERVICE_OBJECT_TYPE :
-                $typeName = "OBJECT";
+                $typeName = static::SERVICE_OBJECT_NAME;
                 break;
             case static::SERVICE_LIST_TYPE :
-                $typeName = "LIST";
+                $typeName = static::SERVICE_LIST_NAME;
                 break;
             case static::SERVICE_PAGING_LIST_TYPE :
-                $typeName = "PAGING";
+                $typeName = static::SERVICE_PAGING_LIST_NAME;
                 break;
         }
         if ($typeName === null) {
@@ -83,48 +117,48 @@ abstract class Types
     /**
      * 是否为Error类型
      *
-     * @param int $typeId
+     * @param int $typeId JSON类型ID
      *
      * @return bool
      */
     public function isErrorType($typeId)
     {
-        return $typeId === static::SERVICE_ERROR_TYPE;
+        return (int) $typeId === static::SERVICE_ERROR_TYPE;
     }
 
     /**
      * 是否为Object类型
      *
-     * @param int $typeId
+     * @param int $typeId JSON类型ID
      *
      * @return bool
      */
     public function isObjectType($typeId)
     {
-        return $typeId == static::SERVICE_OBJECT_TYPE;
+        return (int) $typeId === static::SERVICE_OBJECT_TYPE;
     }
 
     /**
      * 是否为List类型
      *
-     * @param int $typeId
+     * @param int $typeId JSON类型ID
      *
      * @return bool
      */
     public function isListType($typeId)
     {
-        return $typeId === static::SERVICE_LIST_TYPE;
+        return (int) $typeId === static::SERVICE_LIST_TYPE;
     }
 
     /**
      * 是否为分页List类型
      *
-     * @param int $typeId
+     * @param int $typeId JSON类型ID
      *
      * @return bool
      */
     public function isPagingListType($typeId)
     {
-        return $typeId === static::SERVICE_PAGING_LIST_TYPE;
+        return (int) $typeId === static::SERVICE_PAGING_LIST_TYPE;
     }
 }

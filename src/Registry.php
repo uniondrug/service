@@ -1,36 +1,30 @@
 <?php
 /**
- * 微服务注册
- * @link www.uniondrug.cn
+ * 微服务
  * @author wsfuyibing <websearch@163.com>
- * @date 2017-11-06
+ * @date 2017-12-21
  */
-
 namespace UniondrugService;
 
 use \Phalcon\Di\Injectable;
 
 /**
- * 服务注册中心
+ * 服务注册
  * @property \Phalcon\Config $config
  * @package UniondrugService
  */
 class Registry extends Injectable
 {
-
     private static $serverHistory = null;
 
     /**
      * 读取服务注册信息
-     * <code>
-     * $url1 = Registry::getUrl("core", "menu/index");
-     * $url2 = Registry::getUrl("core", "menu/index", ["key" => "value"]);
-     * </code>
      *
      * @param string $name 服务名称
      * @param string $route 路由地址
      *
      * @return string
+     * @example Registry::getUrl("core", "menu/index");
      */
     public static function getUrl($name, $route)
     {
@@ -41,16 +35,12 @@ class Registry extends Injectable
 
     /**
      * 按服务名称获取服务所在主机
-     * <code>
-     * $serviceName = 'order';
-     * $serviceUrl = $this->getHostByName($serviceName);
-     * // return 'http://order.service.uniondrug.cn/'
-     * </code>
      *
-     * @param string $name
+     * @param string $name 微服务名称
      *
      * @return string
      * @throws Exception
+     * @example $this->getHostByName('core')
      */
     public function getHostByName($name)
     {
@@ -70,12 +60,10 @@ class Registry extends Injectable
                 throw new Exception("can not call service configuration");
             }
         }
-
         $key = strtolower($name);
         if (isset(self::$serverHistory[$key])) {
             return self::$serverHistory[$key];
         }
-
-        throw new Exception("call '{$name}' undefined service");
+        throw new Exception("未定义'{$name}'微服务");
     }
 }

@@ -1,11 +1,9 @@
 <?php
 /**
- * 微服务结果处理
- * @link www.uniondrug.cn
+ * 微服务
  * @author wsfuyibing <websearch@163.com>
- * @date 2017-11-06
+ * @date 2017-12-21
  */
-
 namespace UniondrugService;
 
 /**

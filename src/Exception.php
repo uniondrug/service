@@ -1,18 +1,15 @@
 <?php
 /**
- * 微服务异常定义
- * @link www.uniondrug.cn
+ * 微服务
  * @author wsfuyibing <websearch@163.com>
- * @date 2017-11-06
+ * @date 2017-12-21
  */
-
 namespace UniondrugService;
 
 /**
- * Class Exception
+ * 异常处理
  * @package UniondrugService
  */
 class Exception extends \Exception
 {
-
 }
