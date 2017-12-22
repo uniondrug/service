@@ -51,13 +51,13 @@ class ResponseData extends Types
         /**
          * 2. 数据值类型转换
          */
-        $this->convertValueType($this->responseData["data"]);
+        $this->convertValueType($this->responseData);
         /**
          * 3. JSON格式兼容
          */
         if ($this->isObjectType($typeId)) {
             $this->responseData["data"] = (object) $this->responseData["data"];
-        } else if ($this->isListType($typeId) || $this->isPagingListType($typeId)) {
+        } else {
             $this->responseData["data"]["body"] = (array) $this->responseData["data"]["body"];
             if ($this->isPagingListType($typeId) && isset($this->responseData["data"]["paging"])) {
                 $this->responseData["data"]["paging"] = (object) $this->responseData["data"]["paging"];
