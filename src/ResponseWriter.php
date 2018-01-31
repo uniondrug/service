@@ -1,13 +1,18 @@
 <?php
 /**
  * 微服务
+ *
  * @author wsfuyibing <websearch@163.com>
- * @date 2017-12-21
+ * @date   2017-12-21
  */
+
 namespace UniondrugService;
+
+use Phalcon\Paginator\Adapter\QueryBuilder;
 
 /**
  * 接口数据返回操作
+ *
  * @package UniondrugService
  */
 class ResponseWriter extends Types
@@ -17,8 +22,8 @@ class ResponseWriter extends Types
     /**
      * 设置分页对象
      *
-     * @param int $total 总数量
-     * @param int $page 当前页
+     * @param int $total    总数量
+     * @param int $page     当前页
      * @param int $pageSize 每页数量
      *
      * @return $this
@@ -26,6 +31,7 @@ class ResponseWriter extends Types
     public function setPaging($total, $page = 1, $pageSize = 10)
     {
         $this->lastPaging = new ResponsePaging($total, $page, $pageSize);
+
         return $this;
     }
 
@@ -43,7 +49,7 @@ class ResponseWriter extends Types
     {
         return new ResponseData(parent::SERVICE_ERROR_TYPE, [
             "errno" => $errno ? $errno : 1,
-            "error" => $error
+            "error" => $error,
         ]);
     }
 
@@ -96,24 +102,33 @@ class ResponseWriter extends Types
      * return $this->withPaging($data, $paging);
      * </code>
      *
-     * @param array          $data 二维数组
-     * @param ResponsePaging $paging 分页结构
+     * @param array|QueryBuilder $data   二维数组
+     * @param bool               $paging 分页结构
      *
      * @return ResponseData
      */
-    public function withPaging($data, $paging = false)
+    public function withPaging($data, $paging = null)
     {
-        if ($paging === false) {
+        if ($paging === null) {
             $paging = $this->lastPaging;
             if ($paging !== null) {
                 $this->lastPaging = null;
             }
         }
+
+        // 兼容Phalcon的Paginator结果
+        if ($data instanceof QueryBuilder) {
+            $res = $data->getPaginate();
+            $data = $res->items->toArray();
+            $paging = new ResponsePaging($res->total_items, $res->current, $res->limit);
+        }
+
         return new ResponseData(parent::SERVICE_PAGING_LIST_TYPE, $data, $paging);
     }
 
     /**
      * 接口返回成功数据
+     *
      * @return ResponseData
      * @example $this->withSuccess()
      */
