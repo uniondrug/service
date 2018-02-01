@@ -8,8 +8,6 @@
 
 namespace UniondrugService;
 
-use Phalcon\Paginator\Adapter\QueryBuilder;
-
 /**
  * 接口数据返回操作
  *
@@ -102,8 +100,8 @@ class ResponseWriter extends Types
      * return $this->withPaging($data, $paging);
      * </code>
      *
-     * @param array|QueryBuilder $data   二维数组
-     * @param bool               $paging 分页结构
+     * @param array|\stdClass $data   二维数组，或者是QueryBuilder的getPaginate()方法返回的结构体
+     * @param bool            $paging 分页结构
      *
      * @return ResponseData
      */
@@ -117,10 +115,9 @@ class ResponseWriter extends Types
         }
 
         // 兼容Phalcon的Paginator结果
-        if ($data instanceof QueryBuilder) {
-            $res = $data->getPaginate();
-            $data = $res->items->toArray();
-            $paging = new ResponsePaging($res->total_items, $res->current, $res->limit);
+        if ($data instanceof \stdClass && property_exists($data, 'items')) {
+            $paging = new ResponsePaging($data->total_items, $data->current, $data->limit);
+            $data = $data->items->toArray();
         }
 
         return new ResponseData(parent::SERVICE_PAGING_LIST_TYPE, $data, $paging);
