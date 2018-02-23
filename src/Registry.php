@@ -1,15 +1,18 @@
 <?php
 /**
  * 微服务
+ *
  * @author wsfuyibing <websearch@163.com>
- * @date 2017-12-21
+ * @date   2017-12-21
  */
+
 namespace UniondrugService;
 
 use \Phalcon\Di\Injectable;
 
 /**
  * 服务注册
+ *
  * @property \Phalcon\Config $config
  * @package UniondrugService
  */
@@ -20,16 +23,23 @@ class Registry extends Injectable
     /**
      * 读取服务注册信息
      *
-     * @param string $name 服务名称
+     * @param string $name  服务名称
      * @param string $route 路由地址
      *
      * @return string
      * @example Registry::getUrl("core", "menu/index");
+     * @throws \UniondrugService\Exception
      */
     public static function getUrl($name, $route)
     {
         $reg = new Registry();
-        $url = $reg->getHostByName($name).'/'.$route;
+        if ($reg->getDI()->has('registerClient')) {
+            $node = $reg->getDI()->getShared('registerClient')->getNode($name);
+        } else {
+            $node = $reg->getHostByName($name);
+        }
+        $url = rtrim($node, '/') . '/' . ltrim($route, '/');
+
         return $url;
     }
 
@@ -56,7 +66,7 @@ class Registry extends Injectable
                         }
                     }
                 }
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 throw new Exception("can not call service configuration");
             }
         }
