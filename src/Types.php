@@ -4,7 +4,7 @@
  * @author wsfuyibing <websearch@163.com>
  * @date 2017-12-21
  */
-namespace UniondrugService;
+namespace Uniondrug\Service;
 
 /**
  * 类型常量

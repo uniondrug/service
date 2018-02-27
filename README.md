@@ -23,15 +23,3 @@
             │   └── Types.php
             └── README.md
 ```
-
-*Composer*
-
-```json
-{
-    "autoload" : {
-        "psr-4" : {
-            "Pails\\" : "vendor/uniondrug/framework/src"
-        }
-    }
-}
-```

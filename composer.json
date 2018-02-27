@@ -15,7 +15,7 @@
     "require" : {},
     "autoload" : {
         "psr-4" : {
-            "UniondrugService\\" : "src/"
+            "Uniondrug\\Service\\" : "src/"
         }
     },
     "config" : {

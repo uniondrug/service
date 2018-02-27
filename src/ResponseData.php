@@ -4,13 +4,12 @@
  * @author wsfuyibing <websearch@163.com>
  * @date 2017-12-21
  */
-namespace UniondrugService;
+namespace Uniondrug\Service;
 
 use Phalcon\Http\Response;
 
 /**
  * 接口数据返回
- * @package UniondrugService
  */
 class ResponseData extends Types
 {
@@ -23,8 +22,10 @@ class ResponseData extends Types
      * 数据构造
      *
      * @param int            $typeId 数据类型
-     * @param array          $data 数据体
+     * @param array          $data   数据体
      * @param ResponsePaging $paging 分页设置
+     *
+     * @throws \Uniondrug\Service\Exception
      */
     public function __construct($typeId, $data, $paging = null)
     {
