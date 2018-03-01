@@ -1,12 +1,15 @@
 <?php
 /**
  * 微服务
+ *
  * @author wsfuyibing <websearch@163.com>
- * @date 2017-12-21
+ * @date   2017-12-21
  */
+
 namespace Uniondrug\Service;
 
 use Phalcon\Http\Response;
+use Uniondrug\Structs\StructInterface;
 
 /**
  * 接口数据返回
@@ -15,15 +18,15 @@ class ResponseData extends Types
 {
     private $responseData = [
         "errno" => 0,
-        "error" => ""
+        "error" => "",
     ];
 
     /**
      * 数据构造
      *
-     * @param int            $typeId 数据类型
-     * @param array          $data   数据体
-     * @param ResponsePaging $paging 分页设置
+     * @param int                                      $typeId 数据类型
+     * @param array|\Uniondrug\Structs\StructInterface $data   数据体
+     * @param ResponsePaging                           $paging 分页设置
      *
      * @throws \Uniondrug\Service\Exception
      */
@@ -32,6 +35,9 @@ class ResponseData extends Types
         /**
          * 1. 数据格式化
          */
+        if ($data instanceof StructInterface) {
+            $data = $data->toArray();
+        }
         is_array($data) || $data = [];
         $this->responseData['dataType'] = $this->getTypeName($typeId);
         if ($this->isErrorType($typeId)) {
@@ -70,6 +76,7 @@ class ResponseData extends Types
 
     /**
      * 获取返回结果
+     *
      * @return array
      */
     public function getData()
@@ -79,11 +86,13 @@ class ResponseData extends Types
 
     /**
      * 获取Phalcon结果
+     *
      * @return Response
      */
     public function response()
     {
         $response = new Response();
+
         return $response->setJsonContent($this->responseData);
     }
 

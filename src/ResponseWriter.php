@@ -80,7 +80,7 @@ class ResponseWriter extends Types
      * return $this->withObject($data);
      * </code>
      *
-     * @param array $data 一维数组
+     * @param array|\Uniondrug\Structs\StructInterface $data 一维数组
      *
      * @return ResponseData
      */
