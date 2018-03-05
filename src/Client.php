@@ -10,12 +10,6 @@ namespace Uniondrug\Service;
 
 /**
  * 微服务的客户端入口
- * @method ResponseWriter setPaging(int $total, int $page = 1, int $pageSize = 10)
- * @method ResponseData withError(string $error, int $errno)
- * @method ResponseData withList(array $data)
- * @method ResponseData withObject(array $data)
- * @method ResponseData withPaging(array | \stdClass $data, ResponsePaging $paging = null)
- * @method ResponseData withSuccess()
  * @method RequestReader delete(string $name, string $route, array $query = [], array $body = [], array $extra = [])
  * @method RequestReader get(string $name, string $route, array $query = [], array $body = [], array $extra = [])
  * @method RequestReader head(string $name, string $route, array $query = [], array $body = [], array $extra = [])
@@ -37,10 +31,6 @@ class Client extends \stdClass
         'PUT',
         'OPTIONS',
     ];
-    /**
-     * @var ResponseWriter
-     */
-    private static $response = null;
 
     /**
      * Magic Dispatcher
@@ -59,18 +49,6 @@ class Client extends \stdClass
             array_unshift($arguments, $method);
 
             return call_user_func_array('\Uniondrug\Service\RequestReader::send', $arguments);
-        }
-
-        // 2. Response返回
-        if (self::$response === null) {
-            self::$response = new ResponseWriter();
-        }
-
-        if (method_exists(self::$response, $name)) {
-            return call_user_func_array([
-                self::$response,
-                $name,
-            ], $arguments);
         }
 
         // 3. 未定义

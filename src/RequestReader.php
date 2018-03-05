@@ -19,14 +19,53 @@ use Psr\Http\Message\ResponseInterface;
  */
 class RequestReader extends Types
 {
+    /**
+     * @var float
+     */
     private $begin = 0;
+    /**
+     * @var float
+     */
     private $finish = 0;
+
+    /**
+     * @var string
+     */
     private $url = '';
+
+    /**
+     * @var int
+     */
     private $errno = 0;
+
+    /**
+     * @var string
+     */
     private $error = '';
+
+    /**
+     * @var ResponseInterface
+     */
+    private $response = null;
+
+    /**
+     * @var array
+     */
     private $headers = [];
+
+    /**
+     * @var string
+     */
     private $contents = '';
+
+    /**
+     * @var
+     */
     private $dataContents;
+
+    /**
+     * @var \GuzzleHttp\ClientInterface
+     */
     private static $httpClient = null;
 
     /**
@@ -102,6 +141,7 @@ class RequestReader extends Types
         // 5. 结果处理
         if ($response instanceof ResponseInterface) {
             $contents = $response->getBody()->getContents();
+            $result->setResponse($response);
             $result->setContents($contents);
             $result->setHeaders($response->getHeaders());
         }
@@ -110,6 +150,14 @@ class RequestReader extends Types
         $result->setFinish();
 
         return $result;
+    }
+
+    /**
+     * @return ResponseInterface
+     */
+    public function response()
+    {
+        return $this->response;
     }
 
     /**
@@ -220,6 +268,17 @@ class RequestReader extends Types
     }
 
     /**
+     * @param $response
+     *
+     * @return $this
+     */
+    public function setResponse(ResponseInterface $response)
+    {
+        $this->response = $response;
+        return $this;
+    }
+
+    /**
      * 设置响应头
      *
      * @param array $headers
@@ -229,7 +288,7 @@ class RequestReader extends Types
     public function setHeaders($headers)
     {
         foreach ($headers as $name => $values) {
-            $this->headers[$name] = implode(', ', $values);
+            $this->headers[$name] = implode('; ', $values);
         }
 
         return $this;
