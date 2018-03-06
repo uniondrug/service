@@ -6,7 +6,7 @@
  * @date   2017-12-21
  */
 
-namespace UniondrugService;
+namespace Uniondrug\Service;
 
 /**
  * 接口数据返回操作
@@ -80,7 +80,7 @@ class ResponseWriter extends Types
      * return $this->withObject($data);
      * </code>
      *
-     * @param array $data 一维数组
+     * @param array|\Uniondrug\Structs\StructInterface $data 一维数组
      *
      * @return ResponseData
      */

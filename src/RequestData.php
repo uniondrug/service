@@ -4,11 +4,10 @@
  * @author wsfuyibing <websearch@163.com>
  * @date 2017-12-21
  */
-namespace UniondrugService;
+namespace Uniondrug\Service;
 
 /**
  * 微服务请求结果的数据结构
- * @package UniondrugService
  */
 class RequestData extends Types
 {

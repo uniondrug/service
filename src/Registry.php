@@ -6,7 +6,7 @@
  * @date   2017-12-21
  */
 
-namespace UniondrugService;
+namespace Uniondrug\Service;
 
 use \Phalcon\Di\Injectable;
 
@@ -28,7 +28,7 @@ class Registry extends Injectable
      *
      * @return string
      * @example Registry::getUrl("core", "menu/index");
-     * @throws \UniondrugService\Exception
+     * @throws \Uniondrug\Service\Exception
      */
     public static function getUrl($name, $route)
     {

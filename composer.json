@@ -12,10 +12,13 @@
             "email" : "websearch@163.com"
         }
     ],
-    "require" : {},
+    "require" : {
+      "uniondrug/framework": "^2.0",
+      "uniondrug/structs": "^2.0"
+    },
     "autoload" : {
         "psr-4" : {
-            "UniondrugService\\" : "src/"
+            "Uniondrug\\Service\\" : "src/"
         }
     },
     "config" : {
