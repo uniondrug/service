@@ -38,6 +38,9 @@ class Registry extends Injectable
         } else {
             $node = $reg->getHostByName($name);
         }
+        if (!$node) {
+            throw new \RuntimeException("Cannot get an upstream for service '$name'");
+        }
         $url = rtrim($node, '/') . '/' . ltrim($route, '/');
 
         return $url;
