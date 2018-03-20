@@ -309,6 +309,11 @@ class RequestReader extends Types
         // 2. JSON解析
         try {
             $arr = \GuzzleHttp\json_decode($contents, false);
+            // 2.1 service error
+            if (isset($arr->errno) && 0 !== (int) $arr->errno){
+                $this->setError($arr->error, $arr->errno);
+            }
+            // 2.2 service body
             if (isset($arr->data) && ($arr->data instanceof \stdClass)) {
                 $this->dataContents = new RequestData($arr->data);
             }
