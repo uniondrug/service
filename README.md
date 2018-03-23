@@ -88,7 +88,8 @@ return [
 举例：
 
 ```php
-public function postAction(){
+public function postAction()
+{
     $serviceName = 'serviceName';
     $route = '/route/action';
     $query = ["page" => 1];
@@ -107,24 +108,15 @@ public function postAction(){
 
 > 方法
 
-* `withError`(`string`, `int`)
-* `withObject`(`array|StructInterface`)
-* `withList`(`array`)
-* `withPaging`(`array`, `ResponsePaging`)
-* `withSuccess`()
-* `setPaging`(`int`, `int`, `int`)
+* `Phalcon\Http\Response` - `withError`(`string` **$error**, `int` **$errno** = 1)
+* `Phalcon\Http\Response` - `withStruct`(`Uniondrug\Structs\StructInterface` **$struct**)
 
 > 举例
 
 ```php
-public function postAction(){
-    $total = 123;
-    $page = 3;
-    $limit = 15;
-    $data = [
-        ["id" => 1, "key" => "value"],
-        ["id" => 2, "key" => "value2"]
-    ];
-    $this->serviceServer->setPaging($total, $page, $limit)->withPaging($data);
+public function postAction()
+{
+    // codes ignored
+    $this->serviceServer->withError("错误原因", 1);
 }
 ```
