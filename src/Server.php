@@ -3,6 +3,7 @@
  * @author wsfuyibing <websearch@163.com>
  * @date   2018-03-23
  */
+
 namespace Uniondrug\Service;
 
 use Phalcon\Http\Response;
@@ -12,6 +13,7 @@ use Uniondrug\Structs\StructInterface;
 
 /**
  * 服务端返回
+ *
  * @package Uniondrug\Service
  */
 class Server
@@ -43,6 +45,7 @@ class Server
         if ((int) $errno === 0) {
             $errno = 1;
         }
+
         return $this->response([], static::DATA_TYPE_ERROR, $error, $errno);
     }
 
@@ -61,6 +64,7 @@ class Server
         } else if (is_subclass_of($struct, PaginatorStruct::class, true)) {
             $dataType = static::DATA_TYPE_PAGING;
         }
+
         return $this->response($struct->toArray(), $dataType, '', 0);
     }
 
@@ -88,12 +92,13 @@ class Server
                 $data['paging'] = (object) (isset($data['paging']) && is_array($data['paging']) ? $data['paging'] : []);
             }
         }
+
         // 4. 返回结果
         return (new Response())->setJsonContent([
-            'errno' => (string) $errno,
-            'error' => (string) $error,
+            'errno'    => (string) $errno,
+            'error'    => (string) $error,
             'dataType' => $dataType,
-            'data' => (object) $data
+            'data'     => (object) $data,
         ]);
     }
 
@@ -126,6 +131,7 @@ class Server
                     break;
             }
         }
+
         return $data;
     }
 }

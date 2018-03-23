@@ -8,7 +8,7 @@
 
 namespace Uniondrug\Service;
 
-use \Phalcon\Di\Injectable;
+use Uniondrug\Framework\Injectable;
 
 /**
  * 服务注册
@@ -33,8 +33,8 @@ class Registry extends Injectable
     public static function getUrl($name, $route)
     {
         $reg = new Registry();
-        if ($reg->getDI()->has('registerClient')) {
-            $node = $reg->getDI()->getShared('registerClient')->getNode($name);
+        if ($reg->di->has('registerClient')) {
+            $node = $reg->di->getShared('registerClient')->getNode($name);
         } else {
             $node = $reg->getHostByName($name);
         }
