@@ -22,10 +22,8 @@ class Server
     const DATA_TYPE_PAGING = 'PAGING';
 
     /**
-     * 执行未定义方法时触发
-     *
-     * @param string $name 方法名
-     * @param array  $arguments 参数数组
+     * @param string          $name
+     * @param StructInterface $arguments
      *
      * @throws \Exception
      */
@@ -35,10 +33,8 @@ class Server
     }
 
     /**
-     * 返回错误Response
-     *
-     * @param string $error 错误原因
-     * @param int    $errno 错误编号
+     * @param string $error
+     * @param int    $errno
      *
      * @return Response
      */
@@ -51,19 +47,7 @@ class Server
     }
 
     /**
-     * 返回成功Response
-     *
-     * @param array|null $data 数据格式可选
-     *
-     * @return Response
-     */
-    public function withSuccess(array $data = null)
-    {
-        return $this->response(is_array($data) ? $data : [], static::DATA_TYPE_OBJECT, "", 0);
-    }
-
-    /**
-     * 以StructInterface返回Response
+     * 返回Struct结果
      *
      * @param StructInterface $struct
      *
