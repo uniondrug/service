@@ -3,6 +3,7 @@
  * @author wsfuyibing <websearch@163.com>
  * @date   2018-03-23
  */
+
 namespace Uniondrug\Service;
 
 use Phalcon\Http\Response;
@@ -12,6 +13,7 @@ use Uniondrug\Structs\StructInterface;
 
 /**
  * 服务端返回
+ *
  * @package Uniondrug\Service
  */
 class Server
@@ -22,8 +24,10 @@ class Server
     const DATA_TYPE_PAGING = 'PAGING';
 
     /**
-     * @param string          $name
-     * @param StructInterface $arguments
+     * 执行未定义方法时触发
+     *
+     * @param string $name 方法名
+     * @param array  $arguments 参数数组
      *
      * @throws \Exception
      */
@@ -33,8 +37,10 @@ class Server
     }
 
     /**
-     * @param string $error
-     * @param int    $errno
+     * 返回错误Response
+     *
+     * @param string $error 错误原因
+     * @param int    $errno 错误编号
      *
      * @return Response
      */
@@ -43,11 +49,24 @@ class Server
         if ((int) $errno === 0) {
             $errno = 1;
         }
+
         return $this->response([], static::DATA_TYPE_ERROR, $error, $errno);
     }
 
     /**
-     * 返回Struct结果
+     * 返回成功Response
+     *
+     * @param array|null $data 数据格式可选
+     *
+     * @return Response
+     */
+    public function withSuccess(array $data = null)
+    {
+        return $this->response(is_array($data) ? $data : [], static::DATA_TYPE_OBJECT, "", 0);
+    }
+
+    /**
+     * 以StructInterface返回Response
      *
      * @param StructInterface $struct
      *
@@ -61,6 +80,7 @@ class Server
         } else if (is_subclass_of($struct, PaginatorStruct::class, true)) {
             $dataType = static::DATA_TYPE_PAGING;
         }
+
         return $this->response($struct->toArray(), $dataType, '', 0);
     }
 
@@ -88,12 +108,13 @@ class Server
                 $data['paging'] = (object) (isset($data['paging']) && is_array($data['paging']) ? $data['paging'] : []);
             }
         }
+
         // 4. 返回结果
         return (new Response())->setJsonContent([
-            'errno' => (string) $errno,
-            'error' => (string) $error,
+            'errno'    => (string) $errno,
+            'error'    => (string) $error,
             'dataType' => $dataType,
-            'data' => (object) $data
+            'data'     => (object) $data,
         ]);
     }
 
@@ -126,6 +147,7 @@ class Server
                     break;
             }
         }
+
         return $data;
     }
 }
