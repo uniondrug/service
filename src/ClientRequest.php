@@ -76,6 +76,12 @@ class ClientRequest extends Injectable
             $url = Registry::getUrl($name, $route);
             $this->lastResponse->setUrl($method, $url);
             // 3.0 load default options
+            if (is_object($query) && method_exists($query, 'toArray')){
+                $query = $query->toArray();
+            }
+            if (is_object($body) && method_exists($body, 'toArray')){
+                $body = $body->toArray();
+            }
             $opts = self::$defaultOptions;
             // 3.1. Query String 的处理
             if (is_array($query) && count($query)) {
