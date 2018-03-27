@@ -108,8 +108,8 @@ public function postAction()
 
 > 方法
 
-* `Phalcon\Http\Response` - `withError`(`string` **$error**, `int` **$errno** = 1)
-* `Phalcon\Http\Response` - `withStruct`(`Uniondrug\Structs\StructInterface` **$struct**)
+* `Phalcon\Http\Response` - **withError**(`string` **$error**, `int` **$errno** = 1)
+* `Phalcon\Http\Response` - **withStruct**(`Uniondrug\Structs\StructInterface` **$struct**)
 
 > 举例
 

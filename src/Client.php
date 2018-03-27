@@ -20,7 +20,7 @@ namespace Uniondrug\Service;
  *
  * @package UniondrugServiceClient
  */
-class Client extends \stdClass
+class Client
 {
     private static $requestMethods = [
         'DELETE',
