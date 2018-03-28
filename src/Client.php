@@ -6,17 +6,15 @@
  */
 namespace Uniondrug\Service;
 
-use Uniondrug\Framework\Injectable;
-
 /**
  * 微服务的客户端入口
- * @method RequestReader delete(string $name, string $route, $query = null, $body = null, $extra = null)
- * @method RequestReader get(string $name, string $route, $query = null, $body = null, $extra = null)
- * @method RequestReader head(string $name, string $route, $query = null, $body = null, $extra = null)
- * @method RequestReader options(string $name, string $route, $query = null, $body = null, $extra = null)
- * @method RequestReader patch(string $name, string $route, $query = null, $body = null, $extra = null)
- * @method RequestReader post(string $name, string $route, $query = null, $body = null, $extra = null)
- * @method RequestReader put(string $name, string $route, $query = null, $body = null, $extra = null)
+ * @method ClientResponseInterface delete(string $name, string $route, $query = null, $body = null, $extra = null)
+ * @method ClientResponseInterface get(string $name, string $route, $query = null, $body = null, $extra = null)
+ * @method ClientResponseInterface head(string $name, string $route, $query = null, $body = null, $extra = null)
+ * @method ClientResponseInterface options(string $name, string $route, $query = null, $body = null, $extra = null)
+ * @method ClientResponseInterface patch(string $name, string $route, $query = null, $body = null, $extra = null)
+ * @method ClientResponseInterface post(string $name, string $route, $query = null, $body = null, $extra = null)
+ * @method ClientResponseInterface put(string $name, string $route, $query = null, $body = null, $extra = null)
  * @package UniondrugServiceClient
  */
 class Client
