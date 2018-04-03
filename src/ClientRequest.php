@@ -3,11 +3,12 @@
  * @author wsfuyibing <websearch@163.com>
  * @date   2018-03-27
  */
+
 namespace Uniondrug\Service;
 
-use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\Stream;
 use Phalcon\Di;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
 use Uniondrug\Framework\Injectable;
 
 /**
@@ -36,12 +37,12 @@ class ClientRequest extends Injectable
         ClientRequest::METHOD_OPTIONS,
         ClientRequest::METHOD_PATCH,
         ClientRequest::METHOD_POST,
-        ClientRequest::METHOD_PUT
+        ClientRequest::METHOD_PUT,
     ];
 
     private static $defaultOptions = [
-        'timeout' => 30,
-        'allow_redirects' => false
+        'timeout'         => 30,
+        'allow_redirects' => false,
     ];
 
     /**
@@ -51,12 +52,14 @@ class ClientRequest extends Injectable
 
     /**
      * 执行HTTP请求
+     *
      * @param string $method
      * @param string $name
      * @param string $route
      * @param array  $query
      * @param array  $body
      * @param array  $extra
+     *
      * @return ClientResponse
      */
     public function run(string $method, string $name, string $route, $query = [], $body = [], $extra = [])
@@ -68,6 +71,7 @@ class ClientRequest extends Injectable
         if (!in_array($method, self::$allowMethods)) {
             $this->lastResponse->setErrno(405);
             $this->lastResponse->setError("请求方式'{$method}'暂不支持");
+
             return $this->lastResponse->logger();
         }
         // 3. init http url
@@ -76,10 +80,10 @@ class ClientRequest extends Injectable
             $url = Registry::getUrl($name, $route);
             $this->lastResponse->setUrl($method, $url);
             // 3.0 load default options
-            if (is_object($query) && method_exists($query, 'toArray')){
+            if (is_object($query) && method_exists($query, 'toArray')) {
                 $query = $query->toArray();
             }
-            if (is_object($body) && method_exists($body, 'toArray')){
+            if (is_object($body) && method_exists($body, 'toArray')) {
                 $body = $body->toArray();
             }
             $opts = self::$defaultOptions;
@@ -111,7 +115,7 @@ class ClientRequest extends Injectable
             }
             // 3.5 send http request
             $this->callHttpClient($method, $url, $opts);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
             $errno = $e->getCode();
             $errno || $errno = 403;
@@ -119,14 +123,17 @@ class ClientRequest extends Injectable
         }
         // 4. 设置运行时长
         $this->lastResponse->setDuration(microtime(true) - $durationBegin);
+
         return $this->lastResponse->logger();
     }
 
     /**
      * 发起HTTP请求
+     *
      * @param $method
      * @param $url
      * @param $options
+     *
      * @throws Exception
      */
     private function callHttpClient($method, $url, $options)
@@ -134,41 +141,50 @@ class ClientRequest extends Injectable
         /**
          * @var \GuzzleHttp\Client $client
          */
-        $client = Di::getDefault()->getShared('httpClient');
+        if (Di::getDefault()->has('tcpClient')) {
+            $client = Di::getDefault()->getShared('tcpClient');
+        } elseif (Di::getDefault()->has('tcpClient')) {
+            $client = Di::getDefault()->getShared('httpClient');
+        } else {
+            $client = new \GuzzleHttp\Client();
+        }
+
         // 1. 请求异常处理
         try {
             /**
-             * @var Response $response
+             * @var ResponseInterface $response
              */
             $response = $client->request($method, $url, $options);
-            if (!($response instanceof Response)) {
+            if (!($response instanceof ResponseInterface)) {
                 throw new Exception("invalid response instance", 400);
             }
+
             /**
              * http status code error
              */
-            if ($response->getStatusCode() !== 200) {
+            if ((int) $response->getStatusCode() !== 200) {
                 throw new Exception("invalid response code", $response->getStatusCode());
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             throw new Exception(preg_replace("/\n.*/", '', $e->getMessage()), $e->getCode());
         }
         /**
          * 2. 无内容返回
-         * @var Stream
+         *
+         * @var StreamInterface
          */
         $stream = $response->getBody();
-        if (!($stream instanceof Stream)) {
+        if (!($stream instanceof StreamInterface)) {
             return;
         }
         /**
          * 3. 内容处理
          */
-        $contents = $stream->getContents();
+        $contents = (string) $stream;
         $this->lastResponse->setContents($contents);
         try {
             $std = \GuzzleHttp\json_decode($contents, false);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             throw new Exception("invalid json response - {$e->getMessage()}", 400);
         }
         /**
