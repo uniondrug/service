@@ -143,7 +143,7 @@ class ClientRequest extends Injectable
          */
         if (Di::getDefault()->has('tcpClient')) {
             $client = Di::getDefault()->getShared('tcpClient');
-        } elseif (Di::getDefault()->has('tcpClient')) {
+        } elseif (Di::getDefault()->has('httpClient')) {
             $client = Di::getDefault()->getShared('httpClient');
         } else {
             $client = new \GuzzleHttp\Client();
