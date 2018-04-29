@@ -3,9 +3,10 @@
  * @author wsfuyibing <websearch@163.com>
  * @date   2018-03-23
  */
-
 namespace Uniondrug\Service;
 
+use Phalcon\Di;
+use Phalcon\Http\Request;
 use Phalcon\Http\Response;
 use Uniondrug\Structs\ListStruct;
 use Uniondrug\Structs\PaginatorStruct;
@@ -13,7 +14,6 @@ use Uniondrug\Structs\StructInterface;
 
 /**
  * 服务端返回
- *
  * @package Uniondrug\Service
  */
 class Server
@@ -25,10 +25,8 @@ class Server
 
     /**
      * 执行未定义方法时触发
-     *
-     * @param string $name 方法名
+     * @param string $name      方法名
      * @param array  $arguments 参数数组
-     *
      * @throws \Exception
      */
     public function __call($name, $arguments)
@@ -38,10 +36,8 @@ class Server
 
     /**
      * 返回错误Response
-     *
      * @param string $error 错误原因
      * @param int    $errno 错误编号
-     *
      * @return Response
      */
     public function withError(string $error, $errno = 1)
@@ -49,15 +45,12 @@ class Server
         if ((int) $errno === 0) {
             $errno = 1;
         }
-
         return $this->response([], static::DATA_TYPE_ERROR, $error, $errno);
     }
 
     /**
      * 返回成功Response
-     *
      * @param array|null $data 数据格式可选
-     *
      * @return Response
      */
     public function withSuccess(array $data = null)
@@ -67,9 +60,7 @@ class Server
 
     /**
      * 以StructInterface返回Response
-     *
      * @param StructInterface $struct
-     *
      * @return Response
      */
     public function withStruct(StructInterface $struct)
@@ -80,18 +71,15 @@ class Server
         } else if (is_subclass_of($struct, PaginatorStruct::class, true)) {
             $dataType = static::DATA_TYPE_PAGING;
         }
-
         return $this->response($struct->toArray(), $dataType, '', 0);
     }
 
     /**
      * 格式化输出结构
-     *
      * @param array  $data
      * @param string $dataType
      * @param string $error
      * @param int    $errno
-     *
      * @return Response
      */
     private function response(array $data, string $dataType, $error, $errno)
@@ -108,21 +96,22 @@ class Server
                 $data['paging'] = (object) (isset($data['paging']) && is_array($data['paging']) ? $data['paging'] : []);
             }
         }
-
-        // 4. 返回结果
-        return (new Response())->setJsonContent([
-            'errno'    => (string) $errno,
-            'error'    => (string) $error,
+        /**
+         * 2. Response
+         * @var Response $response
+         */
+        $response = Di::getDefault()->getShared('response');
+        return $response->setJsonContent([
+            'errno' => (string) $errno,
+            'error' => (string) $error,
             'dataType' => $dataType,
-            'data'     => (object) $data,
+            'data' => (object) $data,
         ]);
     }
 
     /**
      * 类型模糊化
-     *
      * @param array $data
-     *
      * @return array
      */
     private function parseData(array $data)
@@ -147,7 +136,6 @@ class Server
                     break;
             }
         }
-
         return $data;
     }
 }

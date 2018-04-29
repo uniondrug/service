@@ -61,6 +61,7 @@ class ClientRequest extends Injectable
      * @param array  $extra
      *
      * @return ClientResponse
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function run(string $method, string $name, string $route, $query = [], $body = [], $extra = [])
     {
@@ -135,18 +136,25 @@ class ClientRequest extends Injectable
      * @param $options
      *
      * @throws Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     private function callHttpClient($method, $url, $options)
     {
         /**
          * @var \GuzzleHttp\Client $client
          */
-        if (Di::getDefault()->has('tcpClient')) {
-            $client = Di::getDefault()->getShared('tcpClient');
-        } elseif (Di::getDefault()->has('httpClient')) {
-            $client = Di::getDefault()->getShared('httpClient');
+        if ('tcp' === strtolower(substr($url, 0, 3))) {
+            if (Di::getDefault()->has('tcpClient')) {
+                $client = Di::getDefault()->getShared('tcpClient');
+            } else {
+                throw new Exception('TcpClient component must be installed for tcp:// request');
+            }
         } else {
-            $client = new \GuzzleHttp\Client();
+            if (Di::getDefault()->has('httpClient')) {
+                $client = Di::getDefault()->getShared('httpClient');
+            } else {
+                $client = new \GuzzleHttp\Client();
+            }
         }
 
         // 1. 请求异常处理
