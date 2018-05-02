@@ -75,6 +75,33 @@ class Server
     }
 
     /**
+     * 原样Object返回
+     * @param array $data
+     * @return Response
+     * @example $obj->serviceServer->withData([
+     *     'key' => 'value'
+     *     ]);
+     */
+    public function withData(array $data)
+    {
+        return $this->response($data, self::DATA_TYPE_OBJECT, '', 0);
+    }
+
+    /**
+     * 原样List返回
+     * @param array $data
+     * @return Response
+     * @example $obj->serviceServer->withListData([
+     *     ['key' => 'value'],
+     *     ['key' => 'value-2']
+     *     ]);
+     */
+    public function withListData(array $data)
+    {
+        return $this->response(['body' => $data], self::DATA_TYPE_LIST, '', 0);
+    }
+
+    /**
      * 格式化输出结构
      * @param array  $data
      * @param string $dataType
