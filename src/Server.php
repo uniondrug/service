@@ -127,8 +127,7 @@ class Server
          * 2. Response
          * @var Response $response
          */
-        $response = Di::getDefault()->getShared('response');
-        return $response->setJsonContent([
+        return (new Response())->setJsonContent([
             'errno' => (string) $errno,
             'error' => (string) $error,
             'dataType' => $dataType,
