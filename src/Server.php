@@ -6,8 +6,8 @@
 namespace Uniondrug\Service;
 
 use Phalcon\Di;
-use Phalcon\Http\Request;
 use Phalcon\Http\Response;
+use Uniondrug\Framework\Container;
 use Uniondrug\Structs\ListStruct;
 use Uniondrug\Structs\PaginatorStruct;
 use Uniondrug\Structs\StructInterface;
@@ -45,6 +45,15 @@ class Server
         if ((int) $errno === 0) {
             $errno = 1;
         }
+        /**
+         * 非production环境下, 错误消费中追加应用名称
+         * @var Container $di
+         */
+        $di = Di::getDefault();
+        if ('production' !== $di->environment()) {
+            $error = '['.$di->getConfig()->path('app.appName').'] - '.$error;
+        }
+        // 返回Response
         return $this->response([], static::DATA_TYPE_ERROR, $error, $errno);
     }
 
@@ -127,10 +136,10 @@ class Server
          * 2. Response
          * @var Response $response
          */
-        $response = Di::getDefault()->getShared('response');
-        return $response->setJsonContent([
+        return (new Response())->setJsonContent([
             'errno' => (string) $errno,
             'error' => (string) $error,
+            'dataApp' => 'application',
             'dataType' => $dataType,
             'data' => (object) $data,
         ]);
