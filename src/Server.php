@@ -139,7 +139,6 @@ class Server
         return (new Response())->setJsonContent([
             'errno' => (string) $errno,
             'error' => (string) $error,
-            'dataApp' => 'application',
             'dataType' => $dataType,
             'data' => (object) $data,
         ]);
