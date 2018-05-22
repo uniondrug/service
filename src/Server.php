@@ -50,7 +50,8 @@ class Server
          * @var Container $di
          */
         $di = Di::getDefault();
-        if ('production' !== $di->environment()) {
+        $debug = $di->getConfig()->path('app.debug');
+        if ($debug === true) {
             $error = '['.$di->getConfig()->path('app.appName').'] - '.$error;
         }
         // 返回Response
