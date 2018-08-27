@@ -158,8 +158,10 @@ class Server
                 case 'array' :
                     $value = $this->parseData($value);
                     break;
+                case 'bool' :
                 case 'boolean' :
-                    $value = $value ? '1' : '0';
+                    // 2018-08-27: 结构体结果返回支持boolean原始类型
+                    // $value = $value ? '1' : '0';
                     break;
                 case 'integer' :
                 case 'float' :
