@@ -11,6 +11,7 @@ use Uniondrug\Framework\Container;
 use Uniondrug\Structs\ListStruct;
 use Uniondrug\Structs\PaginatorStruct;
 use Uniondrug\Structs\StructInterface;
+use Uniondrug\Service\Mock;
 
 /**
  * 服务端返回
@@ -175,5 +176,17 @@ class Server
             }
         }
         return $data;
+    }
+
+    /**
+     * 返回struct mock数据
+     * @param array $data
+     * @return Response
+     */
+    public function withMock(string $struct)
+    {
+        $mock = new Mock($struct);
+        $data = $mock->toArray();
+        return $this->withSuccess($data);
     }
 }
